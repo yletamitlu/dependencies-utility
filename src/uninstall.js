@@ -3,6 +3,13 @@
 const execa = require('execa');
 const listr = require('listr');
 
+/**
+  * @function
+  * Находит зависимость в package.json по переданному имени и удаляет ее,
+  * если зависимости нет (такого пакета не существует/не был установлен/уже удален) выводит сообщение о том,
+  * что пакет не найден
+  * @param {string} packageName - Имя пакета, который нужно удалить
+  */
 const uninstallPackage = (packageName) => {
     new listr([
         {

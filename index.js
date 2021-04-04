@@ -2,10 +2,10 @@
 
 'use strict';
 
-const info = require('./info.js');
-const install = require('./install.js');
-const uninstall = require('./uninstall.js');
-const help = require('./help.js');
+const info = require('./src/info.js');
+const install = require('./src/install.js');
+const uninstall = require('./src/uninstall.js');
+const help = require('./src/help.js');
 
 const args = process.argv.slice(2);
 
@@ -23,5 +23,5 @@ switch (args[0]) {
         help();
         break;
     default:
-        console.log('Unknown command \nFor help enter: dep-utility help')
+        console.log('Unknown command \nFor help enter: depcontrol help')
 }

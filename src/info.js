@@ -3,6 +3,12 @@
 const fs = require('fs');
 const path = require('path');
 
+/**
+  * @function
+  * Формирует массив объектов {'Package': <имя пакета>, 'Version': <версия пакета>} для вывода в таблицу
+  * информации о зависимостях проекта
+  * @param {Object} obj - объект с зависимостями из package.json
+  */
 const dataForTable = (obj) => {
     const data = [];
 
@@ -16,11 +22,24 @@ const dataForTable = (obj) => {
     return data;
 }
 
+/**
+  * @function
+  * Печатает имя табицы и ее содержимое
+  * @param {string} tableName - Имя таблицы
+  * @param {[object]} tabularData - Массив строк для таблицы
+  */
 const printTable = (tableName, tabularData) => {
     console.log(tableName);
     console.table(tabularData);
 };
 
+/**
+  * @function
+  * Находит по переданному пути/в текущей директории package.json и выводит информацию об имени,
+  * версии и установленных зависимостях проекта.
+  * Если файл не найден, печатает сообщение об ошибке.
+  * @param {string} projectPath - Путь проекта
+  */
 const showProjectInfo = (projectPath) => {
     if (!projectPath) {
         projectPath = '.';

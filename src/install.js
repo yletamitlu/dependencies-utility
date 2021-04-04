@@ -3,6 +3,13 @@
 const execa = require('execa');
 const listr = require('listr');
 
+/**
+  * @function
+  * Добавлеяет конкретную зависимость в package.json, если передано имя пакета,
+  * иначе устанавливает все зависимости из package.json и
+  * выводит соообщение об успешной установке зависимости, либо сообщение о неверном имени пакета
+  * @param {string} packageName - Имя пакета, который нужно установить
+  */
 const installPackage = (packageName) => {
     new listr([
         {
