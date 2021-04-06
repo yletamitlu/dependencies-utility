@@ -8,38 +8,18 @@ const listr = require('listr');
   * Находит зависимость в package.json по переданному имени и удаляет ее,
   * если зависимости нет (такого пакета не существует/не был установлен/уже удален) выводит сообщение о том,
   * что пакет не найден
-  * @param {string} packageName - Имя пакета, который нужно удалить
+  * @param {string[]} packages - Массив имен пакетов, которые нужно удалить
+  * @param {string[]} options - Опции для удаления
   */
-const uninstallPackage = (packageName) => {
+const uninstallPackage = (packages, options) => {
     new listr([
         {
-            title: `Uninstalling package ${packageName || ''}`,
-            task: async ctx => {
-                if (!packageName) {
-                    ctx.error = 'Specify package name to uninstall';
-                    return Promise.reject(ctx);
-                }
-
-                await execa('npm', ['uninstall', packageName])
-                    .then(result => {
-                        const actions = result.stdout.split('\n')[0];
-
-                        if (!actions.includes('removed')) {
-                            ctx.error = 'Package not found';
-                        } else {
-                            ctx.message = `${packageName} uninstalled`;
-                        }
-                    })
-                    .catch(err => console.log(err));
-
-                if (ctx.error) {
-                    return Promise.reject(ctx);
-                }
-            }
+            title: `Uninstalling packages: ${packages.join(', ')}`,
+            task: () => execa('npm', ['uninstall', ...options, ...packages])
+                .catch(err => console.log(err))
         }
     ]).run()
-        .then(ctx => console.log(ctx.message))
-        .catch(ctx => console.log(ctx.error));
+        .catch(err => console.log(err));
 }
 
 module.exports = uninstallPackage;

@@ -4,29 +4,25 @@ const execa = require('execa');
 const listr = require('listr');
 
 /**
-  * @function
-  * Добавлеяет конкретную зависимость в package.json, если передано имя пакета,
-  * иначе устанавливает все зависимости из package.json и
-  * выводит соообщение об успешной установке зависимости, либо сообщение о неверном имени пакета
-  * @param {string} packageName - Имя пакета, который нужно установить
-  */
-const installPackage = (packageName) => {
-    new listr([
-        {
-            title: packageName ? `Installing package ${packageName}` : 'Installing dependencies from package.json',
-            task: async ctx => {
-                 await execa('npm', ['install', packageName || ''])
-                    .then(result => ctx.message = result.stdout.split('\n')[0])
-                    .catch(() => ctx.error = 'Wrong package name')
+ * @function
+ * Добавлеяет конкретную зависимость в package.json, если передано имя пакета,
+ * иначе устанавливает все зависимости из package.json и
+ * выводит соообщение об успешной установке зависимости, либо сообщение о неверном имени пакета
+ * @param {string[]} packages - Массив имен пакетов, которые нужно установить
+ * @param {string[]} options - Опции для установки
+ */
+const installPackage = (packages, options) => {
+    const tasks = [];
 
-                if (ctx.error) {
-                    return Promise.reject(ctx);
-                }
-            }
-        }
-    ]).run()
-        .then(ctx => console.log(ctx.message))
-        .catch(ctx => console.log(ctx.error));
+    packages.forEach(pkg => {
+        tasks.push({
+            title: pkg ? `Installing package ${pkg}` : 'Installing dependencies from package.json',
+            task: (_, task) => execa('npm', ['install', ...options, pkg || ''])
+                    .catch(() => task.skip(`Wrong package name '${pkg}'`))
+        })
+    });
+
+    new listr(tasks).run().catch(err => console.log(err));
 }
 
 module.exports = installPackage;
