@@ -4,11 +4,12 @@
 `npm install depcontrol`
 
 ### Использование
-`depcontrol info [path to project]`
+`depcontrol help` - показать справку о доступных командах утилиты
 
-`depcontrol install <package>[@<tag>]`
+`depcontrol info [path to project]` - получить информацию о проекте
 
-`depcontrol install <package>[@<version>]`
+`depcontrol install [option] <package>[@<tag>]` - установить зависимость
+`depcontrol install [option] <package>[@<version>]`
 
-`depcontrol uninstall <package>`
+`depcontrol uninstall [option] <package>` - удалить зависимость
  
